@@ -1,0 +1,19 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ProductManagement
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ling_corp
+    username: gramdhan
+    password: Lili@123
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+
+
+jwt:
+  secret: afd4fb233dbdee52016dc54c049686aafa7c85efca1229392aed424fdb49c09f
