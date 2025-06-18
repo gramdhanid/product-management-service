@@ -8,17 +8,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.math.BigDecimal;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "master_product")
-public class Product extends ReferenceBase {
-    @Column(length = 50)
-    private String name;
-    private BigDecimal price;
-
+@Table(name = "sys_master_roles")
+public class Roles extends ReferenceBase {
+    @Column(length = 10)
+    private String roleName;
+    @Column(length = 10)
+    private String roleCode;
 }

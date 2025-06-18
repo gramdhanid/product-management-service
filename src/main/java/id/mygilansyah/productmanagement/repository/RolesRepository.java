@@ -1,9 +1,9 @@
 package id.mygilansyah.productmanagement.repository;
 
-import id.mygilansyah.productmanagement.model.Product;
+import id.mygilansyah.productmanagement.model.Roles;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface RolesRepository extends JpaRepository<Roles, Long> {
 }
