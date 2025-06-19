@@ -12,8 +12,10 @@ import java.util.Optional;
 public interface RolesRepository extends JpaRepository<Roles, Long> {
 
 
-    @Query("select r from Roles r where r.roleCode = ?1 and r.roleName = ?2 and r.deleted = ?3")
-    Optional<Roles> findByRoleCodeAndRoleNameAndDeleted(String roleCode, String roleName, Boolean deleted);
+//    @Query("select r from Roles r where (r.roleCode = ?1 or r.roleName = ?2) and r.deleted = ?3")
+//    Optional<Roles> findByRoleCodeOrRoleNameAndDeleted(String roleCode, String roleName, Boolean deleted);
+
+    Optional<Roles> findTopByRoleCodeOrRoleNameAndDeleted(String roleCode, String roleName, Boolean deleted);
 
     @Query("select r from Roles r where r.id = ?1 and r.deleted = ?2")
     Optional<Roles> findByIdAndDeleted(Long id, Boolean deleted);

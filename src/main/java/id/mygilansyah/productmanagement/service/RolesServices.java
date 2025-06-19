@@ -27,13 +27,13 @@ public class RolesServices {
         try {
             log.info("HIT Service ADD / UPDATE Roles");
             Roles roles = new Roles();
-            Optional<Roles> rolesOptional = rolesRepository.findByRoleCodeAndRoleNameAndDeleted(rolesDTO.getRoleCode(), rolesDTO.getRoleName(), false);
+            Optional<Roles> rolesOptional = rolesRepository.findTopByRoleCodeOrRoleNameAndDeleted(rolesDTO.getRoleCode().toUpperCase(Locale.ROOT), rolesDTO.getRoleName().toUpperCase(Locale.ROOT), false);
             if (rolesOptional.isPresent()) {
                 if (rolesDTO.getId() != null) {
                     roles = rolesOptional.get();
                 } else {
                     log.info("Role already exists");
-                    throw new CustomException("Roles isn't available", ErrorCode.GENERIC_FAILURE);
+                    throw new CustomException("Role Name / Role Code isn't available", ErrorCode.GENERIC_FAILURE);
                 }
             }
             roles.setRoleName(rolesDTO.getRoleName().toUpperCase(Locale.ROOT));

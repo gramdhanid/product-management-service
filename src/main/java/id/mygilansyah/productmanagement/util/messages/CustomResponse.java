@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component;
 @ToString
 public class CustomResponse<T> {
 
-    private T data;
     private String message;
     private String detail;
     private Integer httpStatusCode;
+    private T data;
 
 }
