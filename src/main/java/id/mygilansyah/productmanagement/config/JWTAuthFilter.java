@@ -1,6 +1,5 @@
 package id.mygilansyah.productmanagement.config;
 
-import id.mygilansyah.productmanagement.util.messages.CustomResponseGenerator;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -17,7 +16,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
 public class JWTAuthFilter extends OncePerRequestFilter {
 
