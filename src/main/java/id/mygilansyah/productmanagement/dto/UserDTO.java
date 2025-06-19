@@ -12,6 +12,7 @@ public class UserDTO {
     @AllArgsConstructor
     @ToString
     public static class RegistrationDTO {
+        private Long id;
         @NotBlank(message = "Username cannot be empty")
         private String username;
         @NotBlank(message = "Password cannot be empty")

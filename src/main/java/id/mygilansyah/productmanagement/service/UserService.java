@@ -5,6 +5,7 @@ import id.mygilansyah.productmanagement.model.User;
 import id.mygilansyah.productmanagement.repository.UserRepository;
 import id.mygilansyah.productmanagement.util.exception.CustomException;
 import id.mygilansyah.productmanagement.util.exception.ErrorCode;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Locale;
@@ -14,28 +15,27 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final Argon2PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, Argon2PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
-
-    /*
-    * CRUD
-    * Create User
-    * Read User (By ID, Get All)
-    * Update User
-    * Delete User
-    */
 
     public UserDTO.ResponseDTO createUser(UserDTO.RegistrationDTO registrationDTO) throws CustomException {
         try {
-            Optional<User> optionalUser = userRepository.findByUsernameAndEmailAndDeleted(registrationDTO.getUsername(), registrationDTO.getEmail(), false);
+            Optional<User> optionalUser = userRepository.findTopByUsernameOrEmailAndDeleted(registrationDTO.getUsername(), registrationDTO.getEmail(), false);
             User user = new User();
             if (optionalUser.isPresent()) {
-                throw new CustomException("User isn't available", ErrorCode.GENERIC_FAILURE);
+                if(registrationDTO.getId() != null) {
+                    user = optionalUser.get();
+                } else {
+                    throw new CustomException("Username / email isn't available", ErrorCode.GENERIC_FAILURE);
+                }
             }
             user.setUsername(registrationDTO.getUsername().toLowerCase(Locale.ROOT));
-            user.setPassword(registrationDTO.getPassword());
+//            user.setPassword(registrationDTO.getPassword());
+            user.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
             user.setFullName(registrationDTO.getFullName().toUpperCase(Locale.ROOT));
             user.setEmail(registrationDTO.getEmail().toLowerCase(Locale.ROOT));
             user.setPhoneNumber(registrationDTO.getPhoneNumber());
@@ -45,6 +45,7 @@ public class UserService {
             user.setActive(true);
 //        user.setRole();
             user.setDeleted(false);
+            user.setLoginStatus(false);
             user.setCreatedBy(user.getCreatedBy());
             user.setCreatedDate(user.getCreatedDate());
             user.setModifiedBy(user.getModifiedBy());

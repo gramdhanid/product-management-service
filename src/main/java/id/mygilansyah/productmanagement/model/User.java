@@ -35,6 +35,7 @@ public class User extends ReferenceBase {
     @JoinColumn(name = "role_id")
     private Roles role;
     private Boolean loginStatus;
+    private Boolean passwordExpired;
     private Integer wrongPasswordCount;
     private LocalDateTime lastLogin;
     private LocalDateTime tokenExpiryDate;

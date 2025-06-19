@@ -78,7 +78,7 @@ public class RolesServices {
         }
     }
 
-    public RolesDTO.ResponseRolesDTO toDTO(Roles role) throws CustomException {
+    public RolesDTO.ResponseRolesDTO toDTO(Roles role) {
         RolesDTO.ResponseRolesDTO responseRolesDTO = new RolesDTO.ResponseRolesDTO();
         responseRolesDTO.setId(role.getId());
         responseRolesDTO.setRolename(role.getRoleName());

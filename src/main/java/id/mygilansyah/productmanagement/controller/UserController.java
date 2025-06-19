@@ -23,7 +23,7 @@ public class UserController {
         this.customResponseGenerator = customResponseGenerator;
     }
 
-    @PostMapping("add")
+    @PostMapping("/add")
     public CustomResponse<Object> addUser(@Valid @RequestBody UserDTO.RegistrationDTO registrationDTO) {
         try {
             return customResponseGenerator.successResponse(userService.createUser(registrationDTO), HttpStatus.CREATED.toString());

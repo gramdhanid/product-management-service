@@ -10,7 +10,10 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Query("select u from User u where u.username = ?1 and u.email = ?2 and u.deleted = ?3")
-    Optional<User> findByUsernameAndEmailAndDeleted(String username, String email, Boolean deleted);
+    Optional<User> findTopByUsernameOrEmailAndDeleted(String username, String email, Boolean deleted);
+
+    @Query("select u from User u where u.username = ?1 and u.deleted = ?2")
+    Optional<User> findByUsernameAndDeleted(String username, Boolean deleted);
+
 
 }
