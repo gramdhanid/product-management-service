@@ -22,6 +22,7 @@ public class UserDTO {
         @Email
         @NotBlank(message = "Email cannot be empty")
         private String email;
+        private Long roleId;
         @NotBlank(message = "Phone Number cannot be empty")
         private String phoneNumber;
         @NotBlank(message = "Address cannot be empty")

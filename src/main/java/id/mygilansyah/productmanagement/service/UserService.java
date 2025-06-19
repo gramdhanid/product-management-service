@@ -2,6 +2,7 @@ package id.mygilansyah.productmanagement.service;
 
 import id.mygilansyah.productmanagement.dto.UserDTO;
 import id.mygilansyah.productmanagement.model.User;
+import id.mygilansyah.productmanagement.repository.RolesRepository;
 import id.mygilansyah.productmanagement.repository.UserRepository;
 import id.mygilansyah.productmanagement.util.exception.CustomException;
 import id.mygilansyah.productmanagement.util.exception.ErrorCode;
@@ -16,10 +17,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final Argon2PasswordEncoder passwordEncoder;
+    private final RolesRepository rolesRepository;
 
-    public UserService(UserRepository userRepository, Argon2PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, Argon2PasswordEncoder passwordEncoder, RolesRepository rolesRepository, RolesRepository rolesRepository1) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.rolesRepository = rolesRepository1;
     }
 
     public UserDTO.ResponseDTO createUser(UserDTO.RegistrationDTO registrationDTO) throws CustomException {
@@ -34,7 +37,6 @@ public class UserService {
                 }
             }
             user.setUsername(registrationDTO.getUsername().toLowerCase(Locale.ROOT));
-//            user.setPassword(registrationDTO.getPassword());
             user.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
             user.setFullName(registrationDTO.getFullName().toUpperCase(Locale.ROOT));
             user.setEmail(registrationDTO.getEmail().toLowerCase(Locale.ROOT));
@@ -43,8 +45,9 @@ public class UserService {
             user.setCity(registrationDTO.getCity().toUpperCase(Locale.ROOT));
             user.setCountry(registrationDTO.getCountry().toUpperCase(Locale.ROOT));
             user.setActive(true);
-//        user.setRole();
             user.setDeleted(false);
+            user.setRole(rolesRepository.findByIdAndDeleted(registrationDTO.getRoleId(), false)
+                    .orElseThrow(() -> new CustomException("Role not found", ErrorCode.GENERIC_FAILURE)));
             user.setLoginStatus(false);
             user.setCreatedBy(user.getCreatedBy());
             user.setCreatedDate(user.getCreatedDate());

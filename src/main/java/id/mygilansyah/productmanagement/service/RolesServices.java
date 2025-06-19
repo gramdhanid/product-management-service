@@ -38,14 +38,7 @@ public class RolesServices {
             }
             roles.setRoleName(rolesDTO.getRoleName().toUpperCase(Locale.ROOT));
             roles.setRoleCode(rolesDTO.getRoleCode().toUpperCase(Locale.ROOT));
-//            roles.setVersion();
             roles.setDeleted(false);
-//            roles.setCreatedBy();
-//            roles.setCreatedDate();
-//            roles.setModifiedBy();
-//            roles.setModifiedDate();
-//            roles.setId();
-//            roles.setDescription();
             rolesRepository.save(roles);
             log.info("Role added/updated");
             return toDTO(roles);

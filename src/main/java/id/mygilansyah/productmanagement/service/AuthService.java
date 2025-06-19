@@ -11,7 +11,6 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -35,14 +33,12 @@ public class AuthService {
 
     private final UserService userService;
     private final RolesServices rolesServices;
-    private final RolesRepository rolesRepository;
     private final UserRepository userRepository;
     private final Argon2PasswordEncoder passwordEncoder;
 
-    public AuthService(UserService userService, RolesServices rolesServices, RolesRepository rolesRepository, UserRepository userRepository, Argon2PasswordEncoder passwordEncoder) {
+    public AuthService(UserService userService, RolesServices rolesServices, UserRepository userRepository, Argon2PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.rolesServices = rolesServices;
-        this.rolesRepository = rolesRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -53,9 +49,6 @@ public class AuthService {
     private Long EXPIRED_TIME;
     private static final String PREFIX = "Bearer ";
 
-//    private Argon2PasswordEncoder argon2PasswordEncoder() {
-//        return Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8();
-//    }
 
     @Transactional
     public AuthDTO.LoginResponse login(AuthDTO.LoginRequest loginRequest) throws CustomException {
