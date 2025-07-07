@@ -27,10 +27,15 @@ public class AuthController {
     }
 
     @GetMapping("/check")
-    public CustomResponse<Object> checkApi (){
-        Map<String, String> stringMap = new HashMap<>();
-        stringMap.put("check", "Berhasil terhubung API");
-        return customResponseGenerator.successResponse(stringMap.get("check"), HttpStatus.OK.getReasonPhrase());
+    public CustomResponse<Object> checkApi (@RequestParam String date){
+//        Map<String, String> stringMap = new HashMap<>();
+//        stringMap.put("check", "Berhasil terhubung API");
+//        return customResponseGenerator.successResponse(stringMap.get("check"), HttpStatus.OK.getReasonPhrase());
+        try {
+            return customResponseGenerator.successResponse(authService.testAuth(date), HttpStatus.OK.getReasonPhrase());
+        } catch (Exception e){
+            return customResponseGenerator.errorResponse(e.getMessage());
+        }
     }
 
     @PostMapping("/login")

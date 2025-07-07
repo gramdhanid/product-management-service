@@ -25,7 +25,7 @@ public class RolesDTO {
     @ToString
     public static class ResponseRolesDTO {
         private Long id;
-        private String rolename;
+        private String roleName;
         private String roleCode;
     }
 

@@ -2,7 +2,6 @@ package id.mygilansyah.productmanagement.service;
 
 import id.mygilansyah.productmanagement.dto.AuthDTO;
 import id.mygilansyah.productmanagement.model.User;
-import id.mygilansyah.productmanagement.repository.RolesRepository;
 import id.mygilansyah.productmanagement.repository.UserRepository;
 import id.mygilansyah.productmanagement.util.exception.CustomException;
 import id.mygilansyah.productmanagement.util.exception.ErrorCode;
@@ -21,10 +20,10 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.time.temporal.ChronoField;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,10 +51,12 @@ public class AuthService {
 
     @Transactional
     public AuthDTO.LoginResponse login(AuthDTO.LoginRequest loginRequest) throws CustomException {
+        log.info("Login request: {}", loginRequest);
         User user = userRepository.findTopByUsernameOrEmailAndDeleted(loginRequest.getUsername(), loginRequest.getUsername(), false)
                 .orElseThrow(() -> new CustomException("Username / email isn't available", ErrorCode.GENERIC_FAILURE));
-        if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+        if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword()) && user.getActive()) {
             isLogin(user);
+            log.info("Login successful for user: {}", user.getUsername());
             user.setLoginStatus(true);
             user.setTokenExpiryDate(LocalDateTime.now().plusMinutes(EXPIRED_TIME));
             user.setWrongPasswordCount(0);
@@ -66,6 +67,15 @@ public class AuthService {
             log.info("Wrong password");
             throw new CustomException("Wrong password", ErrorCode.GENERIC_FAILURE);
         }
+    }
+
+    public String testAuth (String time){
+//        LocalTime convert = LocalTime.parse(time);
+//        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("hh:mm:ssa");
+//        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+//        Arrays.sort();
+        LocalTime inputFormatter = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm:ssa"));
+        return inputFormatter.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
     }
 
     @Transactional
@@ -113,7 +123,7 @@ public class AuthService {
 
     private String checkAuthorityString(AuthDTO.LoginResponse loginResponse) {
         String authorities = "";
-        if (loginResponse.getRoles().getRolename().equals("ADMIN")) {
+        if (loginResponse.getRoles().getRoleName().equals("ADMIN")) {
             authorities = authorities + "ROLE_ADMIN";
         } else {
             authorities = authorities + "ROLE_CUSTOMER";

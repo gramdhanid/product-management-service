@@ -5,9 +5,11 @@ spring:
   application:
     name: ProductManagement
   datasource:
-    url: jdbc:postgresql://localhost:5432/ling_corp
-    username: gramdhan
-    password: Lili@123
+    url: jdbc:postgresql://localhost:5432/lingcorp
+#    username: gramdhan
+#    password: Lili@123
+    username: postgres
+    password: postgrespass
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect

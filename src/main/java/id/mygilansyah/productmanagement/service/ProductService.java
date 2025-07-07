@@ -7,7 +7,16 @@ import id.mygilansyah.productmanagement.util.exception.CustomException;
 import id.mygilansyah.productmanagement.util.exception.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 @Service
 @Slf4j
@@ -50,6 +59,31 @@ public class ProductService {
         log.info("Get product by id: {}", id);
         return toDto(productRepository.findById(id)
                 .orElseThrow(() -> new CustomException("Product Not Found", ErrorCode.GENERIC_FAILURE)));
+    }
+
+    public Page<ProductDTO> pagingProduct(String sSearch, int startPage, int pageSize, String sortBy, String sortDir) throws CustomException {
+        log.info("Paging product by: {}", sSearch);
+        Page<Product> page = productRepository.getProduct(sSearch, PageRequest.of(startPage, pageSize, sortDirection(sortBy, sortDir)));
+        List<ProductDTO> dtoList = toDtoList(page.getContent());
+        return new PageImpl<>(dtoList, PageRequest.of(startPage, pageSize), page.getTotalElements());
+    }
+
+    private List<ProductDTO> toDtoList(List<Product> products) {
+        List<ProductDTO> dtoList = new ArrayList<>();
+        if (products != null) {
+            for (Product product : products) {
+                dtoList.add(toDto(product));
+            }
+        }
+        return dtoList;
+    }
+
+    private Sort sortDirection(String sortBy, String sortDir) {
+        if (!sortDir.isEmpty() && !sortDir.isEmpty()) {
+            return sortDir.toUpperCase(Locale.ROOT).equals("ASC") ? Sort.by(Sort.Direction.ASC, sortBy) : Sort.by(Sort.Direction.DESC, sortBy);
+        } else {
+            return Sort.by(Sort.Direction.ASC, "id");
+        }
     }
 
     public Boolean deleteProductById(Long id) throws CustomException {

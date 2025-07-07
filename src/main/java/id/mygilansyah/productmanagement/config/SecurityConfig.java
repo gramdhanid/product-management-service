@@ -1,11 +1,8 @@
 package id.mygilansyah.productmanagement.config;
 
-import id.mygilansyah.productmanagement.util.messages.CustomResponseGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -26,24 +23,25 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .addFilterBefore(new JWTAuthFilter(SECRET), UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(new JWTAuthFilter(SECRET), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/user/**").permitAll()
                         .requestMatchers("/api/roles/**").hasRole("ADMIN")
                         .requestMatchers("/api/product/**").hasRole("CUSTOMER")
                         .requestMatchers("/api/auth/**").permitAll()
-                        .anyRequest().authenticated())
-                .exceptionHandling((exception) -> exception.accessDeniedHandler(new CustomDeniedHandler()))
-                .headers((headers) -> headers
-                        .referrerPolicy(referrer -> referrer
-                                .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN)
-                        )
-                        .xssProtection(xss -> xss.headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK))
-                        .contentSecurityPolicy(csp -> csp
-                                .policyDirectives("default-src 'self'"))
-                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
-                        .httpStrictTransportSecurity(hstsConfig -> hstsConfig.maxAgeInSeconds(31536000))
-                );
+//                        .anyRequest().authenticated())
+                        .anyRequest().permitAll());
+//                .exceptionHandling((exception) -> exception.accessDeniedHandler(new CustomDeniedHandler()))
+//                .headers((headers) -> headers
+//                        .referrerPolicy(referrer -> referrer
+//                                .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN)
+//                        )
+//                        .xssProtection(xss -> xss.headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK))
+//                        .contentSecurityPolicy(csp -> csp
+//                                .policyDirectives("default-src 'self'"))
+//                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
+//                        .httpStrictTransportSecurity(hstsConfig -> hstsConfig.maxAgeInSeconds(31536000))
+//                );
         return http.build();
     }
 

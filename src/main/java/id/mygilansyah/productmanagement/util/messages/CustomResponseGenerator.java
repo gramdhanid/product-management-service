@@ -1,5 +1,6 @@
 package id.mygilansyah.productmanagement.util.messages;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -22,4 +23,14 @@ public class CustomResponseGenerator<T> {
         customResponse.setDetail(detail);
         return customResponse;
     }
+
+//    public CustomPagingResponse<T> pagingResponse(Page<T> page){
+//        CustomPagingResponse<T> customPagingResponse = new CustomPagingResponse<>();
+//        customPagingResponse.setPageNo();
+//        customPagingResponse.setPageSize();
+//        customPagingResponse.setTotalElements();
+//        customPagingResponse.setTotalPages();
+//        customPagingResponse.setContent();
+//
+//    }
 }
